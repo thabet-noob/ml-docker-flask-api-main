@@ -104,3 +104,27 @@ Troubleshooting
     docker stop <container_id>
 
 This repository supports a YouTube `video <>`_
+
+
+Vercel Deployment
+-----------------
+
+You can deploy this project to Vercel as a static site with a Python serverless function that serves the prediction endpoint.
+
+1. Ensure the trained model file `app/model.joblib` (or `model.joblib` at repo root) is present in the repository. Vercel will include this file in the deployment bundle.
+
+2. Login to Vercel and import the repository (or use the Vercel CLI):
+
+.. code-block::
+
+    # using Vercel CLI
+    vercel login
+    vercel --prod
+
+3. The project already contains `vercel.json` and an API function in `api/predict.py`. The static frontend is in `public/index.html` and will communicate with `/api/predict`.
+
+Notes and limits:
+
+- Serverless functions on Vercel have size and cold-start limits. If your model is large, consider hosting the model in object storage and loading it from the function, or deploying on a dedicated server (e.g., Render, Railway, or a container in a cloud VM).
+- Check the Python runtime used by Vercel; if some packages are missing you can add a `requirements.txt` in the project root (this repo already has one) and Vercel's Python builder will install dependencies.
+- For heavy traffic, use a hosted model endpoint or a larger compute option.
