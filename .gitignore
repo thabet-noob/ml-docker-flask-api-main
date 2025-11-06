@@ -22,8 +22,6 @@ build/
 # Model artifacts
 *.joblib
 *.pkl
-!app/model.joblib
-!model.joblib
 
 # Docker
 docker-compose.override.yml
@@ -35,3 +33,5 @@ docker-compose.override.yml
 .DS_Store
 
 .venv
+app/model.joblib
+model.joblib
