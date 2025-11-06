@@ -1,3 +1,37 @@
-/.vscode
-**/.venv/
+## Editor directories and files
+.vscode/
+__pycache__/
+*.py[cod]
+*$py.class
 
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python packaging
+*.egg-info/
+dist/
+build/
+
+# Secrets and env files
+.env
+.venvrc
+
+# Model artifacts
+*.joblib
+*.pkl
+!app/model.joblib
+!model.joblib
+
+# Docker
+docker-compose.override.yml
+
+# Vercel
+.vercel/
+
+# macOS
+.DS_Store
+
+.venv

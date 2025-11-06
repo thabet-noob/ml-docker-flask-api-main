@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iris Predictor</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f7f9fb; padding:20px }
+    .card { background:white; padding:20px; border-radius:8px; max-width:700px; margin:20px auto; box-shadow:0 2px 10px rgba(0,0,0,0.06) }
+    label { font-weight:600; display:block; margin-top:10px }
+    input { width:100%; padding:8px; margin-top:6px; border:1px solid #ddd; border-radius:4px }
+    button { margin-top:14px; padding:10px 16px; background:#2c7be5; color:white; border:none; border-radius:6px; cursor:pointer }
+    pre { background:#f0f3f6; padding:12px; border-radius:6px }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Iris Predictor (Vercel)</h2>
+    <p>Enter the 4 features and click <strong>Predict</strong>. Ensure the model file is present in the repository.</p>
+
+    <label>Sepal length</label>
+    <input id="slen" type="number" value="5.1" step="0.1">
+
+    <label>Sepal width</label>
+    <input id="swid" type="number" value="3.5" step="0.1">
+
+    <label>Petal length</label>
+    <input id="plen" type="number" value="1.4" step="0.1">
+
+    <label>Petal width</label>
+    <input id="pwid" type="number" value="0.2" step="0.1">
+
+    <button id="btn">Predict</button>
+
+    <h3>Result</h3>
+    <pre id="out">No prediction yet</pre>
+  </div>
+
+  <script>
+    async function predict() {
+      const features = [
+        parseFloat(document.getElementById('slen').value),
+        parseFloat(document.getElementById('swid').value),
+        parseFloat(document.getElementById('plen').value),
+        parseFloat(document.getElementById('pwid').value)
+      ];
+
+      const res = await fetch('/api/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ features })
+      });
+      const data = await res.json();
+      document.getElementById('out').innerText = JSON.stringify(data, null, 2);
+    }
+
+    document.getElementById('btn').addEventListener('click', predict);
+  </script>
+</body>
+</html>

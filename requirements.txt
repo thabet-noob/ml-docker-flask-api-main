@@ -3,5 +3,4 @@ fastapi
 numpy
 uvicorn
 requests
-dash
-plotly
+# dash and plotly removed from server requirements to reduce bundle size; run Dash locally if needed
