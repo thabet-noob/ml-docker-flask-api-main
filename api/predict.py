@@ -1,9 +1,5 @@
 import json
-import joblib
-import numpy as np
 import os
-import tempfile
-import urllib.request
 from http import HTTPStatus
 
 # Cached model in global so cold-start load persists across invocations when possible
@@ -27,6 +23,16 @@ def handler(request):
             return ({'error': 'Missing "features" in request body'}, HTTPStatus.BAD_REQUEST)
 
         global _MODEL, _MODEL_PATH
+
+        # Import heavy deps inside the handler so import-time failures don't crash the function
+        try:
+            import joblib
+            import numpy as np
+            import tempfile
+            import urllib.request
+        except Exception as e:
+            # Return a helpful error so you can see missing dependency issues in the response
+            return ({'error': f'Import error: {str(e)}'}, HTTPStatus.INTERNAL_SERVER_ERROR)
 
         # 1) If MODEL_URL env var provided, download to /tmp once and load
         model_url = os.environ.get('MODEL_URL')
@@ -65,6 +71,7 @@ def handler(request):
                 _MODEL_PATH = model_path
             except Exception as e:
                 return ({'error': f'Failed to load model from repo path: {str(e)}'}, HTTPStatus.INTERNAL_SERVER_ERROR)
+
         class_names = np.array(['setosa', 'versicolor', 'virginica'])
 
         arr = np.array(features).reshape(1, -1)
